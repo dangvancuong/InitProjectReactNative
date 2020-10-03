@@ -115,9 +115,8 @@ export default class UploadImage extends Component{
         const name = Math.random().toString(36).substring(7);
         formData.append(payloadKey, {
             uri,
-            image_hash: name,
-            image_name: 'a' + name,
-            infos: `image/${fileType}`,
+            name: name,
+            type: `image/${fileType}`,
         });
         console.log(formData);
         const options = {
