@@ -58,7 +58,7 @@ export default class Edit extends Component {
         })
         .then((response) => response.json())
         .then((resJson) => {
-            Alert.alert('delete ')
+            Alert.alert('Update success ')
             this.props.navigation.dispatch(this.props.navigation.navigate('Home'))
         })
         .catch((error) => {
