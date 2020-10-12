@@ -26,36 +26,37 @@ export default class Add extends Component {
     }
 
     insert = () => {
-        const {infos, email, phone} = this.state
-        return fetch('http://jpc.asia/api/images', {
+        const {name, email, phone} = this.state
+        return fetch('http://jpc.asia/api/infos', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                infos: infos,
+                name: name,
+                email: email,
+                phone: phone,
             })
         })
             .then((response) => response.json())
             .then((resJson) => {
             Alert.alert('thanh cong');
-            console.log(resJson)
             this.setState({
-                infos: '',
+                name: '',
                 email: '',
                 phone: ''
             })
             this.props.navigation.dispatch(this.props.navigation.goBack())
         })
         .catch((error) => {
-            console.log(123123)
+            console.log(error)
         })
     }
 
     render() {
         const {
-            infos,
+            name,
             email,
             phone,
         } = this.state
@@ -64,11 +65,11 @@ export default class Add extends Component {
             <ScrollView>
                 <View style={styles.container}>
                     <View style={styles.formGroup}>
-                        <Text style={styles.label}>infos</Text>
+                        <Text style={styles.label}>Name</Text>
                         <TextInput
-                            onChangeText={(text) => this.setState({infos: text})}
+                            onChangeText={(text) => this.setState({name: text})}
                             autoFocus={true}
-                            value={infos}
+                            value={name}
                             style={styles.formInput} />
                     </View>
 

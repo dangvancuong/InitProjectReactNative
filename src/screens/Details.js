@@ -12,9 +12,14 @@ export default class Details extends Component {
 
     static navigationOptions = ({navigation}) => {
         return {
-            title: 'Details ' + navigation.state.params.name
+            title: 'Detail',
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('detail', {setForm: 'insert'})}>
+                    <Icon name="plus" size={20} style={{marginRight: 15, color: 'black'}}/>
+                </TouchableOpacity>
+            )
         }
-
     }
 
     componentDidMount() {
@@ -22,11 +27,18 @@ export default class Details extends Component {
     }
 
     fetchData = () => {
-        return fetch('http://jpc.asia/api/images?id=' + this.state.id)
+        return fetch('http://jpc.asia/api/infos/' + this.state.id, {
+                method: "GET",
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                })
+            })
+
             .then((response) => response.json())
             .then((responseJson) => {
+                console.log(responseJson)
                 this.setState({
-                    data: responseJson.data,
+                    data: responseJson.item,
                 })
             })
             .catch((error) => {
@@ -34,20 +46,17 @@ export default class Details extends Component {
             })
     }
 
-    Delete = () => {
-        return fetch('http://###/2019/php_api/delete.php', {
-            method: 'POST',
+    deleteInfo = () => {
+        return fetch('http://jpc.asia/api/infos/' + this.state.id, {
+            method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: this.state.id
-            })
+            }
         })
         .then((res) => res.json())
         .then((resJson) => {
-            Alert.alert(resJson.status)
+            Alert.alert('Delete Success')
             this.props.navigation.dispatch(this.props.navigation.goBack())
         })
         .catch((error) => {
@@ -56,8 +65,8 @@ export default class Details extends Component {
     }
 
     render() {
-        const {data} = this.state
-        const {navigation} = this.props
+        const {data} = this.state;
+        const {navigation} = this.props;
 
         return(
             <View style={styles.container}>
@@ -68,14 +77,6 @@ export default class Details extends Component {
 
                     <View style={styles.itemContainer}>
                         <Text style={styles.item}>{data.email}</Text>
-                    </View>
-
-                    <View style={styles.itemContainer}>
-                        <Text style={styles.item}>{data.birth}</Text>
-                    </View>
-
-                    <View style={styles.itemContainer}>
-                        <Text style={styles.item}>{data.gender}</Text>
                     </View>
 
                     <View style={styles.itemContainer}>
@@ -96,7 +97,7 @@ export default class Details extends Component {
                     <View style={{flex: 1, marginLeft: 5}}>
                         <TouchableOpacity
                             activeOpacity={0.8}
-                            onPress={this.Delete}
+                            onPress={this.deleteInfo}
                             style={styles.button}>
                             <Text style={styles.buttonFont}>Delete</Text>
                         </TouchableOpacity>
@@ -140,4 +141,4 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'black'
     }
-})
+});
