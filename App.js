@@ -8,7 +8,7 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      contacts: {}
+      contacts: []
     }
   }
 
@@ -38,14 +38,13 @@ export default class App extends Component {
   }
 
   render() {
-    console.log(this.state.contacts)
     return (
         <View style={{flex: 1, paddingTop: 40}}>
           <Button title='Get contacts' onPress={this.showFirstContactAsync}/>
           <FlatList
               data={this.state.contacts}
               renderItem={({item}) => {
-                return <Text style={styles.textStyle}>{item.id} _ key {item.id}</Text>
+                return <Text>Name: {item.firstName} {item.firstName} phone:{item.phoneNumbers[0].number}</Text>
               }}
               keyExtractor={item => item.id}
           />
