@@ -40,12 +40,17 @@ export default class Home extends Component {
     }
 
     fetchData = () => {
-        fetch('http://jpc.asia/api/images')
+        fetch('http://jpc.asia/api/infos', {
+            method: "GET",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+            }),
+        })
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({
                     isLoading: false,
-                    dataSource: responseJson.items.data
+                    dataSource: responseJson.items
                 })
             })
             .catch((error) => {
@@ -70,7 +75,7 @@ export default class Home extends Component {
                     <Icon name='user' size={20} />
                 </View>
                 <View>
-                    <Text style={styles.itemName}>{item.infos}</Text>
+                    <Text style={styles.itemName}>{item.name}</Text>
                 </View>
             </TouchableOpacity>
         )

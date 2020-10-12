@@ -7,8 +7,6 @@ import {
     ScrollView,
     TouchableOpacity,
     Alert,
-    DatePickerAndroid,
-    Picker
 } from 'react-native';
 
 export default class Edit extends Component {
@@ -18,8 +16,6 @@ export default class Edit extends Component {
             id: this.props.navigation.getParam('id'),
             name: '',
             email: '',
-            birth: '',
-            gender: '',
             phone: ''
         }
     }
@@ -31,15 +27,14 @@ export default class Edit extends Component {
     }
 
     componentDidMount() {
-        return fetch('http://jpc.asia/api/images?id=' + this.state.id)
+        return fetch('http://jpc.asia/api/infos/' + this.state.id)
             .then((res) => res.json())
             .then((resJson) => {
+                console.log(resJson)
                 this.setState({
-                    name: resJson.data.name,
-                    email: resJson.data.email,
-                    birth: resJson.data.birth,
-                    gender: resJson.data.gender,
-                    phone: resJson.data.phone
+                    name: resJson.item.name,
+                    email: resJson.item.email,
+                    phone: resJson.item.phone
                 })
             })
             .catch((error) => {
@@ -48,25 +43,22 @@ export default class Edit extends Component {
     }
 
     update = () => {
-        const {id, name, email, birth, gender, phone} = this.state
-        return fetch('http://###/php_api/update.php', {
-            method: 'POST',
+        const {id, name, email, phone} = this.state;
+        return fetch('http://jpc.asia/api/infos/' + this.state.id, {
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id: id,
                 name: name,
                 email: email,
-                birth: birth,
-                gender: gender,
                 phone: phone
             })
         })
         .then((response) => response.json())
         .then((resJson) => {
-            Alert.alert(resJson.status)
+            Alert.alert('delete ')
             this.props.navigation.dispatch(this.props.navigation.navigate('Home'))
         })
         .catch((error) => {
@@ -74,49 +66,8 @@ export default class Edit extends Component {
         })
     }
 
-    showDatePicker = async (options) => {
-        try {
-            const {action, year, month, day} = await DatePickerAndroid.open(options);
-            if (action !== DatePickerAndroid.dismissedAction) {
-                let date = new Date(year, month, day)
-                let newState = {}
-                let formatDate = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
-                newState['date'] = date
-                newState['birth'] = formatDate
-                this.setState(newState)
-            }
-        } catch ({code, message}) {
-            console.warn(`error`, code, message)
-        }
-    }
-
-    showDatePicker = async (options) => {
-        try {
-            const {
-                action,
-                year,
-                month,
-                day
-            } = await DatePickerAndroid.open(options);
-            if (action !== DatePickerAndroid.dismissedAction) {
-                let date = new Date(year, month, day)
-                let newState = {}
-                let formatDate = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
-                newState['date'] = date
-                newState['dateText'] = formatDate
-                newState['birth'] = newState['dateText']
-                this.setState(newState)
-            }
-        } catch ({
-            code,
-            message
-        }) {
-            console.warn(`error`, code, message)
-        }
-    }
-
     render() {
-        const {name, email, birth, gender, phone} = this.state
+        const {name, email, phone} = this.state;
 
         return(
             <ScrollView>
@@ -139,26 +90,6 @@ export default class Edit extends Component {
                             autoCapitalize="none"
                             style={styles.formInput} />
                     </View>
-
-                    <View style={styles.formGroup}>
-                        <Text style={styles.label}>Birth</Text>
-                        <TouchableOpacity
-                            onPress={() => this.showDatePicker({date: this.state.date, mode: 'spinner'})}
-                            style={styles.formInput}>
-                            <Text style={styles.inputBirth}>{birth}</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    <View style={styles.formGroup}>
-                        <Text style={styles.label}>Gender</Text>
-                        <Picker
-                            selectedValue={gender}
-                            onValueChange={(itemValue) => this.setState({gender: itemValue})}>
-                            <Picker.Item label="Laki - Laki" value="Laki - Laki"/>
-                            <Picker.Item label="Perempuan" value="Perempuan"/>
-                        </Picker>
-                    </View>
-
                     <View style={styles.formGroup}>
                         <Text style={styles.label}>Phone</Text>
                         <TextInput
@@ -217,4 +148,4 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'black'
     }
-})
+});
