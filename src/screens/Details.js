@@ -12,13 +12,7 @@ export default class Details extends Component {
 
     static navigationOptions = ({navigation}) => {
         return {
-            title: 'Detail',
-            headerRight: (
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('detail', {setForm: 'insert'})}>
-                    <Icon name="plus" size={20} style={{marginRight: 15, color: 'black'}}/>
-                </TouchableOpacity>
-            )
+            title: 'Details'
         }
     }
 
@@ -141,4 +135,4 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'black'
     }
-});
+})
