@@ -7,9 +7,10 @@ import {
     ActivityIndicator,
     TouchableOpacity,
     RefreshControl,
+    Button,
     StatusBar
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'
+// import Icon from 'react-native-vector-icons/FontAwesome'
 
 export default class Home extends Component {
     constructor(props) {
@@ -25,7 +26,7 @@ export default class Home extends Component {
             headerRight: (
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Add', {setForm: 'insert'})}>
-                    <Icon name="plus" size={20} style={{marginRight: 15, color: 'black'}}/>
+                    {/*<Icon name="plus" size={20} style={{marginRight: 15, color: 'black'}}/>*/}
                 </TouchableOpacity>
             )
         }
@@ -72,7 +73,7 @@ export default class Home extends Component {
                 }
                 style={styles.itemContainer}>
                 <View style={styles.itemRetangle}>
-                    <Icon name='user' size={20} />
+                    {/*<Icon name='user' size={20} />*/}
                 </View>
                 <View>
                     <Text style={styles.itemName}>{item.name}</Text>
@@ -107,6 +108,12 @@ export default class Home extends Component {
 
         return(
             <View style={styles.container}>
+                <TouchableOpacity
+                    activeOpacity={0.8}
+
+                    style={styles.button}>
+                    <Button style={styles.buttonFont} onPress={() => this.props.navigation.navigate('Contact')} title='Contact'/>
+                </TouchableOpacity>
                 <StatusBar backgroundColor="#207702" barStyle="dark-content"/>
                 <FlatList
                     data={this.state.dataSource}
